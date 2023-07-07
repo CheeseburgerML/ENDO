@@ -1,0 +1,37 @@
+#Welcome to ENDO group!
+#Principle of MendelianRandomization:
+#B2 is the association of interest (impact of BMI on risk of coronary artery disease) 
+#estimated by B2 = B1/ B3. 
+#B1 and B3 are the estimated direct association of the genetic variants on the exposure (ie, genetic variants of BMI) 
+#and the coronary artery disease outcomes 
+#Start to do Mendelian randomizatio！
+#Set the Working directory and install two sample packages
+setwd("D:/MendelianRandomization")
+install.packages("devtools")
+devtools::install_github("MRCIEU/TwoSampleMR")
+#or use these following codes:
+#install.packages("remotes")
+#remotes::install_github(MRCIEU/TwoSampleMR)
+#if not successful, please download TwoSampleMR package from this link: https://github.com/MRCIEU/TwoSampleMR
+library(TwoSampleMR)
+#extract SNPs of BMI
+#website of GWAS: https://gwas.mrcieu.ac.uk/, you can find the GWASid from this website
+BMI<- extract_instruments(outcomes = 'ieu-a-2')
+#Extracting SNP information in outcomes (coronary artery disease)
+outcome_dat <- extract_outcome_data(snps = BMI$SNP, outcomes = 'ebi-a-GCST005195')
+#Merge exposure and outcome data and harmonize them for following mendelian randomization analysis
+dat <- harmonise_data(BMI, outcome_dat)
+#heterogeneity test
+heterogeneity <- mr_heterogeneity(dat)
+#Pleiotropy test
+pleiotropy <- mr_pleiotropy_test(dat)
+#Scatter plot
+mr_scatter_plot(results,dat)
+#leaveoneout test
+leaveoneout <- mr_leaveoneout(dat)
+mr_leaveoneout_plot(leaveoneout)
+#Single test forest plot
+results_single <- mr_singlesnp(dat)
+mr_forest_plot(results_single)
+#Funnel plot
+mr_funnel_plot(results_single)
