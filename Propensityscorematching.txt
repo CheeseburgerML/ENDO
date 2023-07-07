@@ -1,0 +1,67 @@
+STATA EXAMPLE:
+* Load your dataset (replace "your_dataset" with your actual dataset)
+use your_dataset
+
+* Specify the treatment variable and covariates for matching
+psmatch2 treatment_variable covariate1 covariate2 covariate3, outcome(outcome_variable) method(nn)
+
+* View the matched dataset
+list, sepby(treated)
+
+* Assess balance after matching
+psmatch2, summary
+
+* Estimate treatment effect
+reg outcome_variable treatment_variable
+
+
+#example 1 of R
+
+library(tableone)
+library(MatchIt)
+setwd("D:\\****")
+data <- read.csv("beforPSM.csv")
+names(data)
+data[,22:49]<-lapply(data[,22:49],as.factor)
+matchlist <- matchit(CHD ~ gender+BMI+age+smoking+alcohol, data=data,
+                     method   = "nearest",
+                     distance = "glm",      
+                     caliper  = 0.05,      
+                     ratio    = 1,         
+                     replace  = F)          
+summary(matchlist)
+matchdata<- match.data(matchlist,
+                       group = "all",
+                       distance = "distance",
+                       weights = "weights",
+                       subclass = "subclass",
+                       data = NULL,
+                       include.s.weights = TRUE,
+                       drop.unmatched = TRUE)
+table(duplicated(matchdata$id))
+table(matchdata$zq101)
+table(data$zq101)
+matchdata$subclass <- sort(matchdata$subclass)
+a=table(matchdata$subclass);table(a)
+write.table(matchdata,'afterPSM.txt',sep="\t",quote=F,col.names=T)
+
+#example 2 of R
+# Load the MatchIt package
+library(MatchIt)
+
+# Load your dataset (replace "your_dataset" with your actual dataset)
+data <- your_dataset
+
+# Specify the treatment variable and covariates for matching
+treatment_variable <- "treatment"
+covariates <- c("covariate1", "covariate2", "covariate3")
+
+# Perform propensity score matching
+psm_model <- matchit(formula = treatment_variable ~ covariates, data = data, method = "nearest")
+
+# Get the matched dataset
+matched_data <- match.data(psm_model)
+
+# View the matched dataset
+print(matched_data)
+
