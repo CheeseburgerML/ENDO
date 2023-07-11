@@ -1,0 +1,30 @@
+
+library(corrplot)
+
+# Create a sample correlation matrix (replace with your own correlation matrix)
+M <- cor(otu_control)
+
+# Set the diagonal elements to NA
+diag(M) <- NA
+
+# Define a custom color palette
+my_palette <- colorRampPalette(c("#F0F8FF", "#6495ED", "#FF6347"))(n = 100)
+
+# Create the correlation heatmap using corrplot
+corrplot(M, method = "circle", type = "upper", tl.col = "black", tl.srt = 45, col = my_palette, addCoef.col = "black", diag = FALSE)
+
+
+
+library(corrplot)
+
+# Create a sample correlation matrix (replace with your own correlation matrix)
+L <- cor(otu_infected)
+
+# Set the diagonal elements to NA
+diag(L) <- NA
+
+# Define a custom color palette
+my_palette <- colorRampPalette(c("#F0F8FF", "#6495ED", "#FF6347"))(n = 100)
+
+# Create the correlation heatmap using corrplot
+corrplot(L, method = "circle", type = "upper", tl.col = "black", tl.srt = 45, col = my_palette, addCoef.col = "black", diag = FALSE)
