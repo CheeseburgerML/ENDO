@@ -1,3 +1,7 @@
+#Welcome to ENDO!!!
+#This is a script about mantel test
+#You may link gene expression or gut microbiota with other measured parameters by using this
+
 library(tidyverse)
 library(ggcor)
 library(vegan)
